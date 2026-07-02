@@ -1,0 +1,6 @@
+{
+  "name": "Production Project Estimator",
+  "description": "An interactive estimation and pricing application powered by dynamic client-specific rate cards, project detail management, and instant departmental cost summaries.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
