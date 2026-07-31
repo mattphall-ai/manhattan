@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Project } from '../types';
 import { Layers, Plus, Copy, Trash2, RotateCcw, Upload, FileJson, Library, BookmarkPlus } from 'lucide-react';
+import EstimateSwitcher from './EstimateSwitcher';
 
 interface ProjectSelectorProps {
   projects: Project[];
@@ -69,18 +70,11 @@ export default function ProjectSelector({
           <Layers className="w-3.5 h-3.5 text-slate-400" />
           Estimate File:
         </div>
-        <select
-          className="bg-white border border-slate-200 text-slate-800 text-xs font-bold rounded px-2.5 py-1.5 w-full sm:w-[280px] focus:outline-hidden focus:border-blue-500 focus:ring-0 cursor-pointer"
-          value={activeProjectId}
-          onChange={(e) => onSelectProject(e.target.value)}
-          id="select-project"
-        >
-          {projects.map((project) => (
-            <option key={project.id} value={project.id}>
-              {project.details.projectName || 'Untitled Estimate'} ({project.details.jobNumber || 'No Job #'})
-            </option>
-          ))}
-        </select>
+        <EstimateSwitcher
+          projects={projects}
+          activeProjectId={activeProjectId}
+          onSelectProject={onSelectProject}
+        />
       </div>
 
       <div className="flex flex-wrap items-center gap-1.5">

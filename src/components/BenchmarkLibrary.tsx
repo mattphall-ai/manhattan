@@ -24,16 +24,18 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad, tactics, onD
   const searchResults = useMemo(() => {
     if (!isSearching) return [];
     const q = searchQuery.trim().toLowerCase();
-    return tactics.filter(t =>
-      t.name.toLowerCase().includes(q) ||
-      t.description.toLowerCase().includes(q) ||
-      t.category.toLowerCase().includes(q) ||
-      t.roleHours.some(rh => roleName(rh.roleId).toLowerCase().includes(q))
-    );
+    return tactics
+      .filter(t =>
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q) ||
+        t.category.toLowerCase().includes(q) ||
+        t.roleHours.some(rh => roleName(rh.roleId).toLowerCase().includes(q))
+      )
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, [tactics, searchQuery, isSearching]);
 
   const tacticsInCategory = useMemo(
-    () => tactics.filter(t => t.category === category),
+    () => tactics.filter(t => t.category === category).sort((a, b) => a.name.localeCompare(b.name)),
     [tactics, category]
   );
 
