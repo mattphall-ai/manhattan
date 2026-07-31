@@ -193,8 +193,7 @@ export default function EstimatingGrid({
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="border-b border-slate-200 bg-slate-50 text-slate-400 font-bold text-[9px] uppercase tracking-wider">
-                      <th className="py-2 px-4 w-[280px]">Labor Role</th>
-                      <th className="py-2 px-2">Department</th>
+                      <th className="py-2 px-4 w-[320px]">Labor Role</th>
                       <th className="py-2 px-2 text-right w-[100px]">Rate / Hr</th>
                       <th className="py-2 px-2 text-center w-[130px]">Allocated Hours</th>
                       <th className="py-2 px-4 text-right w-[140px]">Cost</th>
@@ -202,84 +201,95 @@ export default function EstimatingGrid({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {[...phase.roles].sort((a, b) => {
-                      const idxA = RATE_CARD.findIndex(rc => rc.id === a.roleId);
-                      const idxB = RATE_CARD.findIndex(rc => rc.id === b.roleId);
-                      return idxA - idxB;
-                    }).map((pr) => {
-                      const roleDef = RATE_CARD.find(r => r.id === pr.roleId);
-                      if (!roleDef) return null;
+                    {(() => {
+                      const sortedRoles = [...phase.roles].sort((a, b) => {
+                        const idxA = RATE_CARD.findIndex(rc => rc.id === a.roleId);
+                        const idxB = RATE_CARD.findIndex(rc => rc.id === b.roleId);
+                        return idxA - idxB;
+                      });
+                      let lastDept: string | null = null;
 
-                      const rate = roleDef.rates[client];
-                      const cost = pr.hours * rate;
+                      return sortedRoles.map((pr) => {
+                        const roleDef = RATE_CARD.find(r => r.id === pr.roleId);
+                        if (!roleDef) return null;
 
-                      return (
-                        <tr key={pr.roleId} className="hover:bg-blue-50/10 transition-colors group">
-                          {/* Role Name */}
-                          <td className="py-2 px-4">
-                            <span className="font-semibold text-slate-800 text-xs">{roleDef.name}</span>
-                          </td>
+                        const rate = roleDef.rates[client];
+                        const cost = pr.hours * rate;
+                        const showDeptDivider = roleDef.department !== lastDept;
+                        lastDept = roleDef.department;
 
-                          {/* Department */}
-                          <td className="py-2 px-2">
-                            <span className="text-[9px] bg-slate-100 text-slate-500 border border-slate-200/60 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
-                              {roleDef.department}
-                            </span>
-                          </td>
+                        return (
+                          <React.Fragment key={pr.roleId}>
+                            {showDeptDivider && (
+                              <tr className="bg-slate-50/80">
+                                <td colSpan={5} className="pt-2.5 pb-1 px-4 border-t border-slate-200">
+                                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                                    {roleDef.department}
+                                  </span>
+                                </td>
+                              </tr>
+                            )}
+                            <tr className="hover:bg-blue-50/10 transition-colors group">
+                              {/* Role Name */}
+                              <td className="py-2 px-4">
+                                <span className="font-semibold text-slate-800 text-xs">{roleDef.name}</span>
+                              </td>
 
-                          {/* Rate */}
-                          <td className="py-2 px-2 text-right font-mono text-xs text-slate-500">
-                            {formatCurrency(rate)}
-                          </td>
+                              {/* Rate */}
+                              <td className="py-2 px-2 text-right font-mono text-xs text-slate-500">
+                                {formatCurrency(rate)}
+                              </td>
 
-                          {/* Hours Input with stepper controls */}
-                          <td className="py-2 px-2 text-center">
-                            <div className="flex items-center justify-center gap-1 w-[110px] mx-auto bg-slate-100 border border-slate-200 rounded px-1 py-0.5">
-                              <button
-                                type="button"
-                                onClick={() => onHoursChange(phase.id, pr.roleId, Math.max(0, pr.hours - 1))}
-                                className="w-4 h-4 flex items-center justify-center bg-white hover:bg-slate-200 text-slate-600 rounded cursor-pointer transition-colors text-[10px] font-bold shadow-xs select-none"
-                                title="Decrease Hours"
-                              >
-                                <Minus className="w-2.5 h-2.5" />
-                              </button>
-                              <input
-                                type="number"
-                                min="0"
-                                placeholder="0"
-                                className="w-10 text-center bg-transparent border-0 focus:ring-0 outline-hidden py-0 text-xs font-semibold text-slate-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                value={pr.hours || ''}
-                                onChange={(e) => onHoursChange(phase.id, pr.roleId, Math.max(0, parseFloat(e.target.value) || 0))}
-                              />
-                              <button
-                                type="button"
-                                onClick={() => onHoursChange(phase.id, pr.roleId, pr.hours + 1)}
-                                className="w-4 h-4 flex items-center justify-center bg-white hover:bg-slate-200 text-slate-600 rounded cursor-pointer transition-colors text-[10px] font-bold shadow-xs select-none"
-                                title="Increase Hours"
-                              >
-                                <Plus className="w-2.5 h-2.5" />
-                              </button>
-                            </div>
-                          </td>
+                              {/* Hours Input with stepper controls */}
+                              <td className="py-2 px-2 text-center">
+                                <div className="flex items-center justify-center gap-1 w-[110px] mx-auto bg-slate-100 border border-slate-200 rounded px-1 py-0.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => onHoursChange(phase.id, pr.roleId, Math.max(0, pr.hours - 1))}
+                                    className="w-4 h-4 flex items-center justify-center bg-white hover:bg-slate-200 text-slate-600 rounded cursor-pointer transition-colors text-[10px] font-bold shadow-xs select-none"
+                                    title="Decrease Hours"
+                                  >
+                                    <Minus className="w-2.5 h-2.5" />
+                                  </button>
+                                  <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="0"
+                                    className="w-10 text-center bg-transparent border-0 focus:ring-0 outline-hidden py-0 text-xs font-semibold text-slate-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    value={pr.hours || ''}
+                                    onChange={(e) => onHoursChange(phase.id, pr.roleId, Math.max(0, parseFloat(e.target.value) || 0))}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => onHoursChange(phase.id, pr.roleId, pr.hours + 1)}
+                                    className="w-4 h-4 flex items-center justify-center bg-white hover:bg-slate-200 text-slate-600 rounded cursor-pointer transition-colors text-[10px] font-bold shadow-xs select-none"
+                                    title="Increase Hours"
+                                  >
+                                    <Plus className="w-2.5 h-2.5" />
+                                  </button>
+                                </div>
+                              </td>
 
-                          {/* Cost */}
-                          <td className="py-2 px-4 text-right font-bold text-slate-800 text-xs">
-                            {cost > 0 ? formatCurrency(cost) : '—'}
-                          </td>
+                              {/* Cost */}
+                              <td className="py-2 px-4 text-right font-bold text-slate-800 text-xs">
+                                {cost > 0 ? formatCurrency(cost) : '—'}
+                              </td>
 
-                          {/* Remove Role */}
-                          <td className="py-2 px-2 text-center">
-                            <button
-                              onClick={() => onRemoveRoleFromPhase(phase.id, pr.roleId)}
-                              className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-all cursor-pointer"
-                              title="Remove Role"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                              {/* Remove Role */}
+                              <td className="py-2 px-2 text-center">
+                                <button
+                                  onClick={() => onRemoveRoleFromPhase(phase.id, pr.roleId)}
+                                  className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-red-500 p-1 rounded hover:bg-red-50 transition-all cursor-pointer"
+                                  title="Remove Role"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        );
+                      });
+                    })()}
                   </tbody>
                 </table>
               )}
