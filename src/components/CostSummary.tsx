@@ -312,10 +312,6 @@ export default function CostSummary({
                 <span class="font-mono font-bold text-blue-600 uppercase">${jobNumber}</span>
               </div>
               <div>
-                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Rate Profile</span>
-                <span class="font-bold text-indigo-600">${client} Profile</span>
-              </div>
-              <div>
                 <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Prepared By</span>
                 <span class="font-semibold text-slate-800">${estimatePreparedBy}</span>
               </div>
@@ -538,10 +534,6 @@ export default function CostSummary({
             <div>
               <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Job Number</span>
               <span class="font-mono font-bold text-blue-600 uppercase">${jobNumber}</span>
-            </div>
-            <div>
-              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Rate Profile</span>
-              <span class="font-bold text-indigo-600">${client} Profile</span>
             </div>
             <div>
               <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Prepared By</span>
