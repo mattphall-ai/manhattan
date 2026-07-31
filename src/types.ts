@@ -44,6 +44,18 @@ export interface CustomPhase {
   notes?: string;
 }
 
+// Every project starts with this phase first: non-creative account/ops labor
+// that applies regardless of what's being produced.
+export const createProductionManagementPhase = (): CustomPhase => ({
+  id: `phase-pm-${Date.now()}`,
+  name: 'Production Management',
+  notes: 'Business Operations & Governance: Non-creative client management, project scoping, financial administration, legal compliance, and ongoing account oversight.',
+  roles: [
+    { roleId: 'business_manager', hours: 2 },
+    { roleId: 'executive_producer', hours: 2 },
+  ],
+});
+
 export interface Project {
   id: string;
   estimateNumber?: string;

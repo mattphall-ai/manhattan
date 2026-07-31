@@ -1,4 +1,4 @@
-import { Project, CustomPhase, OopCost } from './types';
+import { Project, CustomPhase, OopCost, createProductionManagementPhase } from './types';
 
 export type BenchmarkCategory =
 'Animation' | 'Edit & Audio' | 'XR' | 'Digital Art' | 'Live & Virtual Events';
@@ -514,17 +514,14 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
 ];
 
 export const createProjectFromBenchmark = (tactic: BenchmarkTactic, baseEstimateNumber: string): Project => {
-  const phase: CustomPhase = {
-    id: `phase-${Date.now()}`,
-    name: tactic.name,
+  const executionPhase: CustomPhase = {
+    id: `phase-exec-${Date.now()}`,
+    name: 'Product Execution',
     roles: tactic.roleHours.map(rh => ({ roleId: rh.roleId, hours: rh.hours })),
   };
   const oopCosts: OopCost[] = tactic.oopItemName
     ? [{ id: `oop-${Date.now()}`, name: tactic.oopItemName, amount: tactic.oopItemAmount || 0 }]
     : [];
-  const scopeOfWork = tactic.oopDescription
-    ? `${tactic.description}\n\nAssumptions:\n${tactic.oopDescription}`
-    : tactic.description;
   return {
     id: `project-benchmark-${Date.now()}`,
     estimateNumber: baseEstimateNumber,
@@ -537,9 +534,9 @@ export const createProjectFromBenchmark = (tactic: BenchmarkTactic, baseEstimate
       estimatePreparedBy: '',
       businessManager: '',
       agency: '',
-      scopeOfWork,
+      scopeOfWork: tactic.description,
     },
-    phases: [phase],
+    phases: [createProductionManagementPhase(), executionPhase],
     oopCosts,
     contingencyPercent: 0,
     notes: '',

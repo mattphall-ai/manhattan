@@ -278,17 +278,16 @@ export default function CostSummary({
         <div class="max-w-3xl mx-auto space-y-6">
           
           <!-- Title & Brand Header -->
-          <div class="flex justify-between items-start border-b-2 border-slate-900 pb-5">
+          <div class="flex justify-between items-start border-b-2 border-slate-900 pb-3">
             <div>
-              <div class="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] mb-1">PROJECT ESTIMATE & PROPOSAL</div>
-              <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">STUDIO RX</h1>
-              <p class="text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">HIGH-END CREATIVE & VFX PRODUCTION</p>
+              <div class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">PROJECT ESTIMATE & PROPOSAL</div>
+              <h1 class="text-lg font-extrabold text-slate-900 tracking-tight">STUDIO RX</h1>
             </div>
             <div class="text-right">
-              <span class="text-xs font-bold text-slate-800 bg-slate-100 px-3 py-1.5 rounded border border-slate-200 inline-block uppercase tracking-wider font-mono">
+              <span class="text-[10px] font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded border border-slate-200 inline-block uppercase tracking-wider font-mono">
                 Client Proposal #${estimateNumber || '100'}
               </span>
-              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">Prepared Date: ${todayStr}</p>
+              <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1.5">Prepared Date: ${todayStr}</p>
             </div>
           </div>
 
@@ -439,11 +438,6 @@ export default function CostSummary({
               <p class="text-[11px] text-slate-700 font-medium whitespace-pre-wrap leading-relaxed">${notes}</p>
             </div>
           ` : ''}
-
-          <!-- Footer Signature -->
-          <div class="pt-6 border-t border-slate-150 text-center text-[8px] text-slate-400 font-bold uppercase tracking-widest">
-            Studio Rx • Confidential Estimate Prepared By ${estimatePreparedBy}
-          </div>
 
         </div>
 

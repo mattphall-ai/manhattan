@@ -1,4 +1,4 @@
-import { Project } from './types';
+import { Project, CustomPhase, createProductionManagementPhase } from './types';
 
 export const INITIAL_PROJECTS: Project[] = [
   {
@@ -14,7 +14,7 @@ export const INITIAL_PROJECTS: Project[] = [
       businessManager: 'Sarah Jenkins',
       agency: 'Apex Creative Lab'
     },
-    phases: [],
+    phases: [createProductionManagementPhase(), { id: 'phase-exec-100', name: 'Product Execution', roles: [] }],
     oopCosts: [],
     contingencyPercent: 10,
     notes: 'Primary deliverable includes three AI-augmented 30s broadcast spots, an interactive web showcase, and high-fidelity social assets. Standard agency markup and emergency buffer contingency applied.',
@@ -34,7 +34,7 @@ export const INITIAL_PROJECTS: Project[] = [
       businessManager: 'Marcus Brody',
       agency: 'Oasis Digital'
     },
-    phases: [],
+    phases: [createProductionManagementPhase(), { id: 'phase-exec-101', name: 'Product Execution', roles: [] }],
     oopCosts: [],
     contingencyPercent: 5,
     notes: 'Premium commercial with photo-real CGI products and dynamic transition styling. Client B negotiated rate is active.',
@@ -44,6 +44,11 @@ export const INITIAL_PROJECTS: Project[] = [
 ];
 
 export const createNewBlankProject = (name = 'New Project Estimate'): Project => {
+  const executionPhase: CustomPhase = {
+    id: `phase-exec-${Date.now()}`,
+    name: 'Product Execution',
+    roles: [],
+  };
   return {
     id: `project-${Date.now()}`,
     estimateNumber: '102',
@@ -58,7 +63,7 @@ export const createNewBlankProject = (name = 'New Project Estimate'): Project =>
       agency: '',
       scopeOfWork: ''
     },
-    phases: [],
+    phases: [createProductionManagementPhase(), executionPhase],
     oopCosts: [],
     contingencyPercent: 0,
     notes: '',
