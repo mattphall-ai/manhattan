@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { BENCHMARK_CATEGORIES, BENCHMARK_TACTICS, BenchmarkCategory, BenchmarkTactic } from '../benchmarkLibrary';
 import { RATE_CARD } from '../types';
-import { Library, X, Clock, DollarSign, ArrowRight } from 'lucide-react';
+import { Library, X, Clock, DollarSign, ArrowRight, Search } from 'lucide-react';
 
 interface BenchmarkLibraryProps {
   isOpen: boolean;
@@ -14,11 +14,27 @@ const roleName = (roleId: string) => RATE_CARD.find(r => r.id === roleId)?.name 
 export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkLibraryProps) {
   const [category, setCategory] = useState<BenchmarkCategory>('Animation');
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const isSearching = searchQuery.trim().length > 0;
+
+  const searchResults = useMemo(() => {
+    if (!isSearching) return [];
+    const q = searchQuery.trim().toLowerCase();
+    return BENCHMARK_TACTICS.filter(t =>
+      t.name.toLowerCase().includes(q) ||
+      t.description.toLowerCase().includes(q) ||
+      t.category.toLowerCase().includes(q) ||
+      t.roleHours.some(rh => roleName(rh.roleId).toLowerCase().includes(q))
+    );
+  }, [searchQuery, isSearching]);
 
   const tacticsInCategory = useMemo(
     () => BENCHMARK_TACTICS.filter(t => t.category === category),
     [category]
   );
+
+  const visibleTactics = isSearching ? searchResults : tacticsInCategory;
 
   const selected = useMemo(
     () => BENCHMARK_TACTICS.find(t => t.id === selectedId) || null,
@@ -31,6 +47,7 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkL
 
   const handleSelectCategory = (c: BenchmarkCategory) => {
     setCategory(c);
+    setSearchQuery('');
     setSelectedId(null);
   };
 
@@ -64,17 +81,45 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkL
           </button>
         </div>
 
+        {/* Search */}
+        <div className="p-3 border-b border-slate-100 shrink-0">
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setSelectedId(null);
+              }}
+              placeholder="Search benchmarks by name, description, or role..."
+              className="w-full pl-9 pr-8 py-2 border border-slate-200 rounded-lg text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:outline-hidden focus:ring-0 transition-colors"
+              id="benchmark-search-input"
+            />
+            {isSearching && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                title="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Body: category rail + tactic list + detail pane */}
         <div className="flex flex-1 min-h-0">
           {/* Category rail */}
-          <div className="w-40 shrink-0 border-r border-slate-100 bg-slate-50 overflow-y-auto py-2">
+          <div className={`w-40 shrink-0 border-r border-slate-100 bg-slate-50 overflow-y-auto py-2 ${isSearching ? 'opacity-40 pointer-events-none' : ''}`}>
             {BENCHMARK_CATEGORIES.map(c => (
               <button
                 key={c}
                 type="button"
                 onClick={() => handleSelectCategory(c)}
                 className={`w-full text-left px-3 py-2 text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer ${
-                  c === category
+                  c === category && !isSearching
                     ? 'bg-white text-indigo-600 border-l-2 border-indigo-600'
                     : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100 border-l-2 border-transparent'
                 }`}
@@ -86,22 +131,36 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkL
 
           {/* Tactic list */}
           <div className="w-72 shrink-0 border-r border-slate-100 overflow-y-auto">
-            {tacticsInCategory.map(t => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setSelectedId(t.id)}
-                className={`w-full text-left px-3 py-2.5 border-b border-slate-100 transition-colors cursor-pointer ${
-                  t.id === selectedId ? 'bg-indigo-50' : 'hover:bg-slate-50'
-                }`}
-              >
-                <div className="text-xs font-bold text-slate-800 leading-snug">{t.name}</div>
-                <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400 font-medium">
-                  <span className="flex items-center gap-0.5"><Clock className="w-3 h-3" />{totalHours(t)}h</span>
-                  <span>{t.roleHours.length} roles</span>
-                </div>
-              </button>
-            ))}
+            {isSearching && (
+              <div className="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
+                {searchResults.length} result{searchResults.length === 1 ? '' : 's'} across all categories
+              </div>
+            )}
+            {visibleTactics.length === 0 ? (
+              <div className="px-3 py-6 text-center text-xs text-slate-400 font-medium">
+                No benchmarks match "{searchQuery}"
+              </div>
+            ) : (
+              visibleTactics.map(t => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setSelectedId(t.id)}
+                  className={`w-full text-left px-3 py-2.5 border-b border-slate-100 transition-colors cursor-pointer ${
+                    t.id === selectedId ? 'bg-indigo-50' : 'hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="text-xs font-bold text-slate-800 leading-snug">{t.name}</div>
+                  <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400 font-medium">
+                    {isSearching && (
+                      <span className="text-indigo-500 font-bold uppercase tracking-wider">{t.category}</span>
+                    )}
+                    <span className="flex items-center gap-0.5"><Clock className="w-3 h-3" />{totalHours(t)}h</span>
+                    <span>{t.roleHours.length} roles</span>
+                  </div>
+                </button>
+              ))
+            )}
           </div>
 
           {/* Detail pane */}

@@ -60,7 +60,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'social_original_animated_post_basic',
     category: 'Animation',
-    name: 'Social - Original Animated Post (Basic)',
+    name: 'Social - Original Animated Post (Low Complexity)',
     description: '(1) New animated video Post. Includes scrolling or static ISI. Content up to :30 secs long. With ISI, length is up to 2 minutes. -',
     oopDescription: 'Based on storyboard with provideed art assets\n-Includes scrolling ISI\n-No Audio\n- Assumes all licensing costs covered under other budgets',
     roleHours: [{ roleId: 'motion_graphics_designer', hours: 21 }, { roleId: 'senior_producer', hours: 18 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'director_motion_graphics', hours: 2 }, { roleId: 'junior_motion_gfx_designer', hours: 2 }],
@@ -68,7 +68,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'social_campaign_adaptation_video_post_basic_level',
     category: 'Animation',
-    name: 'Social - Campaign Adaptation Video Post (Basic level)',
+    name: 'Social - Campaign Adaptation Video Post (Low Complexity)',
     description: '(1) New video Post created with video assets lifted from existing campaign. Includes scrolling or static ISI. Content up to :30 secs long. With ISI, length is up to 2 minutes. Updated to reflect Offshore pricing',
     oopDescription: 'Based on storyboard with provideed art assets \n-Includes scrolling ISI \n-1 Stock music Track or pickup from campaign\n- Assumes all licensing costs covered under other budgets',
     roleHours: [{ roleId: 'producer_offshore_brazil', hours: 16 }, { roleId: 'motion_graphics_designer_off_shore_brazil', hours: 16 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'audio_engineer', hours: 2 }, { roleId: 'junior_motion_gfx_designer', hours: 2 }, { roleId: 'animation_director_off_shore_brazil', hours: 2 }],
@@ -76,7 +76,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'social_reformat_animated_post_basic_level',
     category: 'Animation',
-    name: 'Social - Reformat Animated Post (basic level)',
+    name: 'Social - Reformat Animated Post (Low Complexity)',
     description: 'Reformating of video post. For example, conversion of Facebook Feed post to Instagram post. - Updated to reflect Offshore Pricing.',
     oopDescription: 'Assumes no changes to content or timing\n- Aspect ratio change \n- Minor layout changes\n- Assumes all licensing costs covered under other budgets\n\n',
     roleHours: [{ roleId: 'producer_offshore_brazil', hours: 13 }, { roleId: 'motion_graphics_designer_off_shore_brazil', hours: 8 }, { roleId: 'junior_motion_gfx_designer', hours: 2 }, { roleId: 'svp_director_of_production', hours: 1 }, { roleId: 'animation_director_off_shore_brazil', hours: 1 }],
@@ -110,16 +110,16 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'simple_show_gfx_package',
     category: 'Animation',
-    name: 'Simple Show GFX Package',
-    description: 'Basic costs for Simple Show Gfx Package',
+    name: 'Low Complexity Show GFX Package',
+    description: 'Basic costs for Low Complexity Show GFX Package',
     oopDescription: '• Includes Open/Close Animation\n• Animated Lower Thirds \n• Standby Screen / Pre-Show Loop',
     roleHours: [{ roleId: 'senior_motion_graphics_designer', hours: 37 }, { roleId: 'senior_producer', hours: 25 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'director_motion_graphics', hours: 2 }, { roleId: 'junior_motion_gfx_designer', hours: 2 }],
   },
   {
     id: 'complex_show_gfx_package',
     category: 'Animation',
-    name: 'Complex Show GFX Package',
-    description: 'Basic costs for Complex Show Gfx Package',
+    name: 'High Complexity Show GFX Package',
+    description: 'Basic costs for High Complexity Show GFX Package',
     oopDescription: '• Includes Open/Close Animation\n• Animated Lower Thirds \n• Additional Animated Show Elements. • Standby Screen / Pre-Show Loop',
     roleHours: [{ roleId: 'senior_motion_graphics_designer', hours: 61 }, { roleId: 'senior_producer', hours: 35 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'director_motion_graphics', hours: 2 }, { roleId: 'junior_motion_gfx_designer', hours: 2 }],
   },
@@ -243,7 +243,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
     id: 'interactive_video_smartcast_production_post',
     category: 'Edit & Audio',
     name: 'Interactive Video (Smartcast) - Production/ Post',
-    description: 'Build interactivity into a video. Assumes KOL shoot with accompanying animations. Assumes in house studio shoot with SRx DP & Director. Assumes mid complexity ask up to 20 videos, 2 paths.',
+    description: 'Build interactivity into a video. Assumes KOL shoot with accompanying animations. Assumes in house studio shoot with SRx DP & Director. Assumes medium complexity ask up to 20 videos, 2 paths.',
     oopDescription: '\n- Assumes use of VERSE interactive platform **Verse Fee to be included on agency estimate, not SRx bid.\n- Includes SRx studio shoot, in-house DP & Director. \n\n',
     oopItemName: 'Verse License',
     oopItemAmount: 12000,
@@ -253,7 +253,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
     id: 'interactive_video_smartcast_post_only',
     category: 'Edit & Audio',
     name: 'Interactive Video (Smartcast) - Post Only',
-    description: 'Build interactivity into a video. Assumes KOL shoot with accompanying animations. Assumes mid complexity ask up to 20 videos, 2 paths.',
+    description: 'Build interactivity into a video. Assumes KOL shoot with accompanying animations. Assumes medium complexity ask up to 20 videos, 2 paths.',
     oopDescription: '\n- Assumes use of VERSE interactive platform. **Verse Fee to be included on agency estimate, not SRx bid\n\n\n',
     oopItemName: 'Verse License',
     oopItemAmount: 12000,
@@ -340,7 +340,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'high_complexity_2d_medical_art',
     category: 'Digital Art',
-    name: 'High complexity 2D Medical Art',
+    name: 'High Complexity 2D Medical Art',
     description: 'Assumes creation of (1) 2D image',
     oopDescription: '• Includes medical research time and supervision• Includes time for creation of relevant moodboards, pencil sketches, and final art\n**Asumes SRx Producer led model with no hours for agency producer- high complexity medical story tellingand/or- high complexity style- Single image or series of images-Can be vector or raster- May include more environment',
     roleHours: [{ roleId: 'digital_artist', hours: 64 }, { roleId: 'senior_producer', hours: 45 }, { roleId: 'senior_digital_artist', hours: 24 }, { roleId: 'director_digital_art', hours: 22 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'assistant_motion_gfx_designer', hours: 2 }],
@@ -366,7 +366,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
     category: 'Digital Art',
     name: 'Instructional Stills',
     description: 'Instructional Stills',
-    oopDescription: '• Includes medical research time and supervision• Includes time for creation of relevant moodboards, pencil sketches, and final art\n**Asumes SRx Producer led model with no hours for agency producer-Assumes 10 mid complexity stills without MOA elements',
+    oopDescription: '• Includes medical research time and supervision• Includes time for creation of relevant moodboards, pencil sketches, and final art\n**Asumes SRx Producer led model with no hours for agency producer-Assumes 10 medium complexity stills without MOA elements',
     roleHours: [{ roleId: 'digital_artist', hours: 56 }, { roleId: 'senior_producer', hours: 40 }, { roleId: 'director_digital_art', hours: 18 }, { roleId: 'senior_digital_artist', hours: 14 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'assistant_motion_gfx_designer', hours: 2 }],
   },
   {
@@ -382,7 +382,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
     category: 'Digital Art',
     name: 'Instructional Frames for animation',
     description: 'Assumes creation of (1) 3D image',
-    oopDescription: '• Includes medical research time and supervision• Includes time for creation of relevant moodboards, pencil sketches, and final art\n**Asumes SRx Producer led model with no hours for agency producer-Assumes storyboards and final art for 2 minute video without MOA elements- Mid complexity style -Layered and prepped for animation',
+    oopDescription: '• Includes medical research time and supervision• Includes time for creation of relevant moodboards, pencil sketches, and final art\n**Asumes SRx Producer led model with no hours for agency producer-Assumes storyboards and final art for 2 minute video without MOA elements- Medium complexity style -Layered and prepped for animation',
     roleHours: [{ roleId: 'digital_artist', hours: 120 }, { roleId: 'senior_producer', hours: 60 }, { roleId: 'director_digital_art', hours: 33 }, { roleId: 'senior_digital_artist', hours: 12 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'assistant_motion_gfx_designer', hours: 2 }],
   },
   {
@@ -412,7 +412,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'low_complexity_comp_art',
     category: 'Digital Art',
-    name: 'Low complexity Comp Art',
+    name: 'Low Complexity Comp Art',
     description: '',
     oopDescription: 'Assumes SRX producer led model 3 rounds of revisionTight idea coming from the team including a set lockupAll relevant assets provided from team including stock assets, branding colors, Vector files for any text assets that are part of the artMinimal to no SRX sketchingLess involved rendering style',
     roleHours: [{ roleId: 'senior_producer', hours: 16 }, { roleId: 'senior_digital_artist', hours: 16 }, { roleId: 'director_digital_art', hours: 4 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'assistant_motion_gfx_designer', hours: 2 }],
@@ -420,7 +420,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
   {
     id: 'high_complexity_comp_art',
     category: 'Digital Art',
-    name: 'High complexity Comp Art',
+    name: 'High Complexity Comp Art',
     description: '',
     oopDescription: 'Assumes SRX producer led model 3 rounds of revision. Can be a looser idea coming from the teamCan include relevant moodboarding/style directionRelevant assets provided from team including stock assets, branding colors, Vector files for any text assets that are part of the art. Can work with team to identify appropriate stock. Stock is not licensed through SRXCan include a round SRX sketchingMore involved rendering style, including mutli-discipline art',
     roleHours: [{ roleId: 'senior_digital_artist', hours: 48 }, { roleId: 'senior_producer', hours: 30 }, { roleId: 'director_digital_art', hours: 12 }, { roleId: 'svp_director_of_production', hours: 2 }, { roleId: 'assistant_motion_gfx_designer', hours: 2 }],
@@ -518,11 +518,13 @@ export const createProjectFromBenchmark = (tactic: BenchmarkTactic, baseEstimate
     id: `phase-${Date.now()}`,
     name: tactic.name,
     roles: tactic.roleHours.map(rh => ({ roleId: rh.roleId, hours: rh.hours })),
-    notes: tactic.oopDescription,
   };
   const oopCosts: OopCost[] = tactic.oopItemName
     ? [{ id: `oop-${Date.now()}`, name: tactic.oopItemName, amount: tactic.oopItemAmount || 0 }]
     : [];
+  const scopeOfWork = tactic.oopDescription
+    ? `${tactic.description}\n\nAssumptions:\n${tactic.oopDescription}`
+    : tactic.description;
   return {
     id: `project-benchmark-${Date.now()}`,
     estimateNumber: baseEstimateNumber,
@@ -535,7 +537,7 @@ export const createProjectFromBenchmark = (tactic: BenchmarkTactic, baseEstimate
       estimatePreparedBy: '',
       businessManager: '',
       agency: '',
-      scopeOfWork: tactic.description,
+      scopeOfWork,
     },
     phases: [phase],
     oopCosts,
