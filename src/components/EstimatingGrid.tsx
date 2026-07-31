@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CustomPhase, RATE_CARD, Client, OopCost } from '../types';
 import { Trash2, Plus, UserPlus, Minus, Receipt, GripVertical } from 'lucide-react';
+import LaborRoleDropdown from './LaborRoleDropdown';
 
 interface EstimatingGridProps {
   phases: CustomPhase[];
@@ -164,26 +165,10 @@ export default function EstimatingGrid({
               {/* Phase Action Toolbar */}
               <div className="flex items-center gap-2 shrink-0 self-end lg:self-auto">
                 {/* Role selection dropdown */}
-                <select
-                  value=""
-                  onChange={(e) => {
-                    if (e.target.value) {
-                      onAddRoleToPhase(phase.id, e.target.value);
-                      e.target.value = ''; // reset selector
-                    }
-                  }}
-                  className="bg-white border border-slate-200 hover:border-slate-300 text-[10px] font-bold uppercase tracking-wider text-slate-600 rounded px-2 py-1 focus:outline-hidden focus:border-blue-500 focus:ring-0 cursor-pointer max-w-[170px]"
-                >
-                  <option value="">+ Add Labor Role...</option>
-                  {RATE_CARD.map((role) => {
-                    const isAlreadyAdded = phase.roles.some(r => r.roleId === role.id);
-                    return (
-                      <option key={role.id} value={role.id} disabled={isAlreadyAdded}>
-                        {role.name} {isAlreadyAdded ? '(Added)' : ''}
-                      </option>
-                    );
-                  })}
-                </select>
+                <LaborRoleDropdown
+                  phaseRoles={phase.roles}
+                  onSelect={(roleId) => onAddRoleToPhase(phase.id, roleId)}
+                />
 
                 {/* Delete phase button */}
                 <button

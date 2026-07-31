@@ -60,13 +60,13 @@ export interface Project {
 
 export const RATE_CARD: RoleRate[] = [
   // Animation
-  { id: 'animation_director_off_shore_brazil', name: 'Animation Director - OFF SHORE BRAZIL', department: 'Animation', rates: { 'Standard': 126, 'Client A': 139, 'Client B': 151 } },
-  { id: 'assistant_motion_gfx_designer', name: 'Assistant Motion GFx designer', department: 'Animation', rates: { 'Standard': 102, 'Client A': 112, 'Client B': 122 } },
+  { id: 'animation_director_off_shore_brazil', name: 'Animation Director - Off Shore Brazil', department: 'Animation', rates: { 'Standard': 126, 'Client A': 139, 'Client B': 151 } },
+  { id: 'assistant_motion_gfx_designer', name: 'Assistant Motion GFX Designer', department: 'Animation', rates: { 'Standard': 102, 'Client A': 112, 'Client B': 122 } },
   { id: 'associate_director_motion_graphics', name: 'Associate Director, Motion Graphics', department: 'Animation', rates: { 'Standard': 207, 'Client A': 228, 'Client B': 248 } },
   { id: 'director_motion_graphics', name: 'Director, Motion Graphics', department: 'Animation', rates: { 'Standard': 255, 'Client A': 280, 'Client B': 306 } },
-  { id: 'junior_motion_gfx_designer', name: 'Junior Motion GFx Designer', department: 'Animation', rates: { 'Standard': 102, 'Client A': 112, 'Client B': 122 } },
+  { id: 'junior_motion_gfx_designer', name: 'Junior Motion GFX Designer', department: 'Animation', rates: { 'Standard': 102, 'Client A': 112, 'Client B': 122 } },
   { id: 'motion_graphics_designer', name: 'Motion Graphics Designer', department: 'Animation', rates: { 'Standard': 123, 'Client A': 135, 'Client B': 148 } },
-  { id: 'motion_graphics_designer_off_shore_brazil', name: 'Motion Graphics Designer - OFF SHORE BRAZIL', department: 'Animation', rates: { 'Standard': 56, 'Client A': 62, 'Client B': 67 } },
+  { id: 'motion_graphics_designer_off_shore_brazil', name: 'Motion Graphics Designer - Off Shore Brazil', department: 'Animation', rates: { 'Standard': 56, 'Client A': 62, 'Client B': 67 } },
   { id: 'senior_motion_graphics_designer', name: 'Senior Motion Graphics Designer', department: 'Animation', rates: { 'Standard': 135, 'Client A': 148, 'Client B': 162 } },
   { id: 'supervising_animation_director', name: 'Supervising Animation Director', department: 'Animation', rates: { 'Standard': 203, 'Client A': 223, 'Client B': 244 } },
   // CGI
@@ -93,7 +93,7 @@ export const RATE_CARD: RoleRate[] = [
   // Executive
   { id: 'evp_director', name: 'EVP, Director', department: 'Executive', rates: { 'Standard': 435, 'Client A': 479, 'Client B': 522 } },
   // Integrated Production
-  { id: 'project_manager_offshore_brazil', name: 'Project Manager - OFFSHORE BRAZIL', department: 'Integrated Production', rates: { 'Standard': 126, 'Client A': 139, 'Client B': 151 } },
+  { id: 'project_manager_offshore_brazil', name: 'Project Manager - Offshore Brazil', department: 'Integrated Production', rates: { 'Standard': 126, 'Client A': 139, 'Client B': 151 } },
   // Live Events
   { id: 'executive_producer', name: 'Executive Producer', department: 'Live Events', rates: { 'Standard': 250, 'Client A': 275, 'Client B': 300 } },
   { id: 'producer', name: 'Producer', department: 'Live Events', rates: { 'Standard': 161, 'Client A': 177, 'Client B': 193 } },
@@ -102,7 +102,7 @@ export const RATE_CARD: RoleRate[] = [
   // Production
   { id: 'associate_producer', name: 'Associate Producer', department: 'Production', rates: { 'Standard': 97, 'Client A': 107, 'Client B': 116 } },
   { id: 'business_manager', name: 'Business Manager', department: 'Production', rates: { 'Standard': 173, 'Client A': 190, 'Client B': 208 } },
-  { id: 'producer_offshore_brazil', name: 'Producer - OFFSHORE BRAZIL', department: 'Production', rates: { 'Standard': 67, 'Client A': 74, 'Client B': 80 } },
+  { id: 'producer_offshore_brazil', name: 'Producer - Offshore Brazil', department: 'Production', rates: { 'Standard': 67, 'Client A': 74, 'Client B': 80 } },
   { id: 'svp_director_virtual_events', name: 'SVP, Director Virtual Events', department: 'Production', rates: { 'Standard': 329, 'Client A': 362, 'Client B': 395 } },
   { id: 'svp_director_of_production', name: 'SVP, Director of Production', department: 'Production', rates: { 'Standard': 329, 'Client A': 362, 'Client B': 395 } },
   { id: 'svp_executive_producer', name: 'SVP, Executive Producer', department: 'Production', rates: { 'Standard': 329, 'Client A': 362, 'Client B': 395 } },
@@ -117,7 +117,7 @@ export const RATE_CARD: RoleRate[] = [
   { id: 'junior_video_editor', name: 'Junior Video Editor', department: 'Video Editing', rates: { 'Standard': 111, 'Client A': 122, 'Client B': 133 } },
   { id: 'senior_video_editor', name: 'Senior Video Editor', department: 'Video Editing', rates: { 'Standard': 173, 'Client A': 190, 'Client B': 208 } },
   { id: 'vp_assoc_dir', name: 'VP, Assoc Dir', department: 'Video Editing', rates: { 'Standard': 210, 'Client A': 231, 'Client B': 252 } },
-  { id: 'video_editing_off_shore_brazil', name: 'Video Editing - OFF SHORE BRAZIL', department: 'Video Editing', rates: { 'Standard': 67, 'Client A': 74, 'Client B': 80 } },
+  { id: 'video_editing_off_shore_brazil', name: 'Video Editing - Off Shore Brazil', department: 'Video Editing', rates: { 'Standard': 67, 'Client A': 74, 'Client B': 80 } },
   { id: 'video_editor', name: 'Video Editor', department: 'Video Editing', rates: { 'Standard': 164, 'Client A': 180, 'Client B': 197 } },
   // XR
   { id: 'assoc_director_xr', name: 'Assoc Director XR', department: 'XR', rates: { 'Standard': 275, 'Client A': 302, 'Client B': 330 } },
