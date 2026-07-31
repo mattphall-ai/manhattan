@@ -296,10 +296,6 @@ export default function CostSummary({
             <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2.5">Project Details</h2>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-y-3 gap-x-4 text-xs">
               <div>
-                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Bid / Estimate #</span>
-                <span class="font-bold text-indigo-700">#${estimateNumber || '100'}</span>
-              </div>
-              <div>
                 <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Project Name</span>
                 <span class="font-bold text-slate-900">${projectName}</span>
               </div>
@@ -316,11 +312,11 @@ export default function CostSummary({
                 <span class="font-semibold text-slate-800">${estimatePreparedBy}</span>
               </div>
               <div>
-                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Biz Manager</span>
+                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Business Manager</span>
                 <span class="font-semibold text-slate-800">${businessManager}</span>
               </div>
               <div>
-                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Agency</span>
+                <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Prepared For</span>
                 <span class="font-semibold text-slate-800">${agency}</span>
               </div>
             </div>
@@ -503,26 +499,20 @@ export default function CostSummary({
         <div class="max-w-3xl mx-auto space-y-6">
           
           <!-- Title & Brand Header -->
-          <div class="flex justify-between items-start border-b-2 border-slate-900 pb-5">
+          <div class="flex justify-between items-start border-b-2 border-slate-900 pb-3">
             <div>
-              <div class="text-[10px] font-black text-slate-500 uppercase tracking-[0.25em] mb-1">INTERNAL AUDIT & BACKUP DETAILS</div>
-              <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">STUDIO RX</h1>
-              <p class="text-[10px] text-slate-400 font-bold tracking-wider mt-0.5 uppercase">FULL ESTIMATE WORKBOOK</p>
+              <h1 class="text-lg font-extrabold text-slate-900 tracking-tight">STUDIO RX</h1>
             </div>
             <div class="text-right">
-              <span class="text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded border border-emerald-100 inline-block uppercase tracking-wider font-mono">
+              <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-100 inline-block uppercase tracking-wider font-mono">
                 Full Estimate #${estimateNumber || '100'}
               </span>
-              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">Audit Date: ${todayStr}</p>
+              <p class="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-1.5">Prepared Date: ${todayStr}</p>
             </div>
           </div>
 
           <!-- Project Information Grid -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs bg-slate-50 border border-slate-200 rounded-lg p-4">
-            <div>
-              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Bid / Estimate #</span>
-              <span class="font-bold text-indigo-700">#${estimateNumber || '100'}</span>
-            </div>
             <div>
               <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Project Name</span>
               <span class="font-bold text-slate-900">${projectName}</span>
@@ -540,11 +530,11 @@ export default function CostSummary({
               <span class="font-semibold text-slate-800">${estimatePreparedBy}</span>
             </div>
             <div>
-              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Biz Manager</span>
+              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Business Manager</span>
               <span class="font-semibold text-slate-800">${businessManager}</span>
             </div>
             <div>
-              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Agency Partner</span>
+              <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Prepared For</span>
               <span class="font-semibold text-slate-800">${agency}</span>
             </div>
             <div>
@@ -563,7 +553,7 @@ export default function CostSummary({
 
           <!-- DETAILED PHASES SECTION -->
           <div class="space-y-6">
-            <h2 class="text-xs font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-900 pb-1">Detailed Breakdown By Phase</h2>
+            <h2 class="text-xs font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-900 pb-1">Detailed Breakdown</h2>
             
             ${phases.map((phase, pIndex) => {
               const assignedRoles = phase.roles.filter(r => r.hours > 0);
@@ -688,7 +678,7 @@ export default function CostSummary({
 
           <!-- ESTIMATE ROLLUP SUMMARY (LEDGER) -->
           <div class="phase-section space-y-3 pt-4">
-            <h2 class="text-xs font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-900 pb-1">Grand Financial Recapitulation</h2>
+            <h2 class="text-xs font-black text-slate-800 uppercase tracking-widest border-b-2 border-slate-900 pb-1">Total by Dept</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Department breakdown -->
