@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Project, Client, RATE_CARD, CustomPhase } from './types';
 import { INITIAL_PROJECTS, createNewBlankProject } from './initialProjects';
+import { BenchmarkTactic, createProjectFromBenchmark } from './benchmarkLibrary';
 import ProjectInfoForm from './components/ProjectInfoForm';
 import EstimatingGrid from './components/EstimatingGrid';
 import CostSummary from './components/CostSummary';
 import ProjectSelector from './components/ProjectSelector';
 import RoleHoursRollup from './components/RoleHoursRollup';
+import BenchmarkLibrary from './components/BenchmarkLibrary';
 import { 
   Sparkles,
   Trash2,
@@ -33,6 +35,7 @@ export default function App() {
   const [isResetAppModalOpen, setIsResetAppModalOpen] = useState(false);
   const [isVersionNotesModalOpen, setIsVersionNotesModalOpen] = useState(false);
   const [tempVersionNotes, setTempVersionNotes] = useState('');
+  const [isBenchmarkLibraryOpen, setIsBenchmarkLibraryOpen] = useState(false);
 
   // 1. Initial Load of projects from LocalStorage
   useEffect(() => {
@@ -202,6 +205,23 @@ export default function App() {
     saveProjects(updated);
     setActiveProjectId(newProj.id);
     setIsNewProjectModalOpen(false);
+  };
+
+  // Load a benchmark tactic from the library as a new active estimate
+  const handleLoadBenchmark = (tactic: BenchmarkTactic) => {
+    let maxBaseNum = 99;
+    projects.forEach(p => {
+      const num = parseInt(p.baseEstimateNumber || '0', 10);
+      if (!isNaN(num) && num > maxBaseNum) {
+        maxBaseNum = num;
+      }
+    });
+    const newBaseNum = (maxBaseNum + 1).toString();
+
+    const newProj = createProjectFromBenchmark(tactic, newBaseNum);
+    const updated = [newProj, ...projects];
+    saveProjects(updated);
+    setActiveProjectId(newProj.id);
   };
 
   // Duplicate project estimate (cloning with version number increments)
@@ -608,6 +628,7 @@ export default function App() {
           onDeleteProject={handleDeleteProject}
           onResetToDefaults={handleResetToDefaults}
           onImportProject={handleImportProject}
+          onOpenBenchmarkLibrary={() => setIsBenchmarkLibraryOpen(true)}
         />
 
         {/* Master Estimator Grid Layout (Main Area vs Summary Sidebar) */}
@@ -962,6 +983,13 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* 7. Benchmark Library: browse and load a tactic as a new estimate */}
+      <BenchmarkLibrary
+        isOpen={isBenchmarkLibraryOpen}
+        onClose={() => setIsBenchmarkLibraryOpen(false)}
+        onLoad={handleLoadBenchmark}
+      />
     </div>
   );
 }

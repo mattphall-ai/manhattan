@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Project } from '../types';
-import { Layers, Plus, Copy, Trash2, RotateCcw, Upload, FileJson } from 'lucide-react';
+import { Layers, Plus, Copy, Trash2, RotateCcw, Upload, FileJson, Library } from 'lucide-react';
 
 interface ProjectSelectorProps {
   projects: Project[];
@@ -11,6 +11,7 @@ interface ProjectSelectorProps {
   onDeleteProject: (id: string) => void;
   onResetToDefaults: () => void;
   onImportProject: (imported: Project) => void;
+  onOpenBenchmarkLibrary: () => void;
 }
 
 export default function ProjectSelector({
@@ -21,7 +22,8 @@ export default function ProjectSelector({
   onDuplicateProject,
   onDeleteProject,
   onResetToDefaults,
-  onImportProject
+  onImportProject,
+  onOpenBenchmarkLibrary
 }: ProjectSelectorProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -89,6 +91,17 @@ export default function ProjectSelector({
         >
           <Plus className="w-3 h-3" />
           <span>New Estimate</span>
+        </button>
+
+        {/* Load from Benchmark Library */}
+        <button
+          onClick={onOpenBenchmarkLibrary}
+          className="flex items-center gap-1 bg-indigo-50 border border-indigo-200 text-indigo-700 hover:bg-indigo-100 font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1.5 rounded transition-colors cursor-pointer"
+          title="Browse benchmark tactics and load one as a new estimate"
+          id="btn-open-benchmark-library"
+        >
+          <Library className="w-3 h-3" />
+          <span>Load Benchmark</span>
         </button>
 
         {/* Duplicate Estimate */}
