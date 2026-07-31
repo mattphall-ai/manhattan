@@ -280,7 +280,7 @@ export default function CostSummary({
           <!-- Title & Brand Header -->
           <div class="flex justify-between items-start border-b-2 border-slate-900 pb-3">
             <div>
-              <div class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">PROJECT ESTIMATE & PROPOSAL</div>
+              <div class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">PROJECT ESTIMATE</div>
               <h1 class="text-lg font-extrabold text-slate-900 tracking-tight">STUDIO RX</h1>
             </div>
             <div class="text-right">

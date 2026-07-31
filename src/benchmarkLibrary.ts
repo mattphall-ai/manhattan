@@ -516,7 +516,7 @@ export const BENCHMARK_TACTICS: BenchmarkTactic[] = [
 export const createProjectFromBenchmark = (tactic: BenchmarkTactic, baseEstimateNumber: string): Project => {
   const executionPhase: CustomPhase = {
     id: `phase-exec-${Date.now()}`,
-    name: 'Product Execution',
+    name: 'Production Execution',
     roles: tactic.roleHours.map(rh => ({ roleId: rh.roleId, hours: rh.hours })),
   };
   const oopCosts: OopCost[] = tactic.oopItemName
@@ -542,5 +542,64 @@ export const createProjectFromBenchmark = (tactic: BenchmarkTactic, baseEstimate
     notes: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+  };
+};
+
+const slugify = (value: string): string => {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '');
+};
+
+// Builds a BenchmarkTactic from the current state of a Project so it can be
+// saved into the library. The auto-generated "Production Management"
+// phase is excluded since it's always re-added fresh when a benchmark is
+// loaded back into a new estimate.
+export const createBenchmarkFromProject = (
+  project: Project,
+  name: string,
+  category: BenchmarkCategory
+): BenchmarkTactic => {
+  const includedPhases = project.phases.filter(p => p.name !== 'Production Management');
+
+  const hoursByRole = new Map<string, number>();
+  includedPhases.forEach(phase => {
+    phase.roles.forEach(r => {
+      if (r.hours > 0) {
+        hoursByRole.set(r.roleId, (hoursByRole.get(r.roleId) || 0) + r.hours);
+      }
+    });
+  });
+  const roleHours: BenchmarkRoleHours[] = Array.from(hoursByRole.entries())
+    .map(([roleId, hours]) => ({ roleId, hours }))
+    .sort((a, b) => b.hours - a.hours);
+
+  const oopDescription = includedPhases
+    .map(p => p.notes?.trim())
+    .filter((n): n is string => !!n)
+    .join('\n\n') || undefined;
+
+  const activeOopCosts = (project.oopCosts || []).filter(o => o.amount > 0);
+  let oopItemName: string | undefined;
+  let oopItemAmount: number | undefined;
+  if (activeOopCosts.length === 1) {
+    oopItemName = activeOopCosts[0].name || 'Custom OOP Fee';
+    oopItemAmount = activeOopCosts[0].amount;
+  } else if (activeOopCosts.length > 1) {
+    oopItemName = 'Combined OOP Costs';
+    oopItemAmount = activeOopCosts.reduce((sum, o) => sum + o.amount, 0);
+  }
+
+  return {
+    id: slugify(name) || `benchmark_${Date.now()}`,
+    category,
+    name,
+    description: project.details.scopeOfWork || '',
+    oopDescription,
+    oopItemName,
+    oopItemAmount,
+    roleHours,
   };
 };

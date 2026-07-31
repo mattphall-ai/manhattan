@@ -222,7 +222,7 @@ export default function EstimatingGrid({
                           <React.Fragment key={pr.roleId}>
                             {showDeptDivider && (
                               <tr className="bg-slate-50/80">
-                                <td colSpan={5} className="pt-2.5 pb-1 px-4 border-t border-slate-200">
+                                <td colSpan={5} className="pt-1 pb-0.5 px-4 border-t border-slate-200">
                                   <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
                                     {roleDef.department}
                                   </span>

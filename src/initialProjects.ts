@@ -14,7 +14,7 @@ export const INITIAL_PROJECTS: Project[] = [
       businessManager: 'Sarah Jenkins',
       agency: 'Apex Creative Lab'
     },
-    phases: [createProductionManagementPhase(), { id: 'phase-exec-100', name: 'Product Execution', roles: [] }],
+    phases: [createProductionManagementPhase(), { id: 'phase-exec-100', name: 'Production Execution', roles: [] }],
     oopCosts: [],
     contingencyPercent: 10,
     notes: 'Primary deliverable includes three AI-augmented 30s broadcast spots, an interactive web showcase, and high-fidelity social assets. Standard agency markup and emergency buffer contingency applied.',
@@ -34,7 +34,7 @@ export const INITIAL_PROJECTS: Project[] = [
       businessManager: 'Marcus Brody',
       agency: 'Oasis Digital'
     },
-    phases: [createProductionManagementPhase(), { id: 'phase-exec-101', name: 'Product Execution', roles: [] }],
+    phases: [createProductionManagementPhase(), { id: 'phase-exec-101', name: 'Production Execution', roles: [] }],
     oopCosts: [],
     contingencyPercent: 5,
     notes: 'Premium commercial with photo-real CGI products and dynamic transition styling. Client B negotiated rate is active.',
@@ -46,7 +46,7 @@ export const INITIAL_PROJECTS: Project[] = [
 export const createNewBlankProject = (name = 'New Project Estimate'): Project => {
   const executionPhase: CustomPhase = {
     id: `phase-exec-${Date.now()}`,
-    name: 'Product Execution',
+    name: 'Production Execution',
     roles: [],
   };
   return {

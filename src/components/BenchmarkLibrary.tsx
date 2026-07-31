@@ -1,44 +1,47 @@
 import { useMemo, useState } from 'react';
-import { BENCHMARK_CATEGORIES, BENCHMARK_TACTICS, BenchmarkCategory, BenchmarkTactic } from '../benchmarkLibrary';
+import { BENCHMARK_CATEGORIES, BenchmarkCategory, BenchmarkTactic } from '../benchmarkLibrary';
 import { RATE_CARD } from '../types';
-import { Library, X, Clock, DollarSign, ArrowRight, Search } from 'lucide-react';
+import { Library, X, Clock, DollarSign, ArrowRight, Search, Trash2, AlertTriangle } from 'lucide-react';
 
 interface BenchmarkLibraryProps {
   isOpen: boolean;
   onClose: () => void;
   onLoad: (tactic: BenchmarkTactic) => void;
+  tactics: BenchmarkTactic[];
+  onDelete: (id: string) => void;
 }
 
 const roleName = (roleId: string) => RATE_CARD.find(r => r.id === roleId)?.name || roleId;
 
-export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkLibraryProps) {
+export default function BenchmarkLibrary({ isOpen, onClose, onLoad, tactics, onDelete }: BenchmarkLibraryProps) {
   const [category, setCategory] = useState<BenchmarkCategory>('Animation');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [tacticToDelete, setTacticToDelete] = useState<BenchmarkTactic | null>(null);
 
   const isSearching = searchQuery.trim().length > 0;
 
   const searchResults = useMemo(() => {
     if (!isSearching) return [];
     const q = searchQuery.trim().toLowerCase();
-    return BENCHMARK_TACTICS.filter(t =>
+    return tactics.filter(t =>
       t.name.toLowerCase().includes(q) ||
       t.description.toLowerCase().includes(q) ||
       t.category.toLowerCase().includes(q) ||
       t.roleHours.some(rh => roleName(rh.roleId).toLowerCase().includes(q))
     );
-  }, [searchQuery, isSearching]);
+  }, [tactics, searchQuery, isSearching]);
 
   const tacticsInCategory = useMemo(
-    () => BENCHMARK_TACTICS.filter(t => t.category === category),
-    [category]
+    () => tactics.filter(t => t.category === category),
+    [tactics, category]
   );
 
   const visibleTactics = isSearching ? searchResults : tacticsInCategory;
 
   const selected = useMemo(
-    () => BENCHMARK_TACTICS.find(t => t.id === selectedId) || null,
-    [selectedId]
+    () => tactics.find(t => t.id === selectedId) || null,
+    [tactics, selectedId]
   );
 
   if (!isOpen) return null;
@@ -56,6 +59,13 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkL
     onLoad(selected);
     onClose();
     setSelectedId(null);
+  };
+
+  const confirmDelete = () => {
+    if (!tacticToDelete) return;
+    onDelete(tacticToDelete.id);
+    if (selectedId === tacticToDelete.id) setSelectedId(null);
+    setTacticToDelete(null);
   };
 
   return (
@@ -173,9 +183,19 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkL
               </div>
             ) : (
               <div className="space-y-4">
-                <div>
-                  <h4 className="text-sm font-black text-slate-900">{selected.name}</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed mt-1.5 whitespace-pre-wrap">{selected.description}</p>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h4 className="text-sm font-black text-slate-900">{selected.name}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed mt-1.5 whitespace-pre-wrap">{selected.description}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setTacticToDelete(selected)}
+                    className="shrink-0 text-slate-400 hover:text-red-500 p-1.5 rounded hover:bg-red-50 transition-colors cursor-pointer"
+                    title="Remove this benchmark from the library"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
                 </div>
 
                 {selected.oopDescription && (
@@ -239,6 +259,44 @@ export default function BenchmarkLibrary({ isOpen, onClose, onLoad }: BenchmarkL
           </button>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {tacticToDelete && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-[60] p-4" id="modal-delete-benchmark">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="bg-red-50 p-4 border-b border-red-150 flex items-center gap-3">
+              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-600 shrink-0">
+                <AlertTriangle className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Remove Benchmark</h3>
+                <p className="text-[10px] font-bold text-red-500 uppercase tracking-wider">Warning: Permanent Action</p>
+              </div>
+            </div>
+            <div className="p-5 space-y-3">
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Are you sure you want to remove <strong className="text-slate-800">"{tacticToDelete.name}"</strong> from the Benchmark Library? This cannot be undone, and it will no longer be available to load into new estimates.
+              </p>
+            </div>
+            <div className="bg-slate-50 p-3 px-5 flex justify-end gap-2 border-t border-slate-150">
+              <button
+                type="button"
+                onClick={() => setTacticToDelete(null)}
+                className="px-3 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-slate-800 text-[10px] font-black uppercase tracking-wider rounded transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded transition-colors shadow-xs cursor-pointer"
+              >
+                Remove Benchmark
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

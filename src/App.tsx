@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Project, Client, RATE_CARD, CustomPhase } from './types';
 import { INITIAL_PROJECTS, createNewBlankProject } from './initialProjects';
-import { BenchmarkTactic, createProjectFromBenchmark } from './benchmarkLibrary';
+import { BenchmarkTactic, BenchmarkCategory, BENCHMARK_TACTICS, BENCHMARK_CATEGORIES, createProjectFromBenchmark, createBenchmarkFromProject } from './benchmarkLibrary';
 import ProjectInfoForm from './components/ProjectInfoForm';
 import EstimatingGrid from './components/EstimatingGrid';
 import CostSummary from './components/CostSummary';
@@ -21,10 +21,14 @@ import {
 } from 'lucide-react';
 
 const STORAGE_KEY = 'production-project-estimates-v5';
+const CUSTOM_BENCHMARKS_KEY = 'production-project-custom-benchmarks-v1';
+const DELETED_BENCHMARKS_KEY = 'production-project-deleted-benchmark-ids-v1';
 
 export default function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string>('');
+  const [customBenchmarks, setCustomBenchmarks] = useState<BenchmarkTactic[]>([]);
+  const [deletedBenchmarkIds, setDeletedBenchmarkIds] = useState<string[]>([]);
 
   // Custom Interactive Dialog Modal States
   const [phaseToDelete, setPhaseToDelete] = useState<{ id: string; name: string } | null>(null);
@@ -36,6 +40,9 @@ export default function App() {
   const [isVersionNotesModalOpen, setIsVersionNotesModalOpen] = useState(false);
   const [tempVersionNotes, setTempVersionNotes] = useState('');
   const [isBenchmarkLibraryOpen, setIsBenchmarkLibraryOpen] = useState(false);
+  const [isSaveBenchmarkModalOpen, setIsSaveBenchmarkModalOpen] = useState(false);
+  const [saveBenchmarkName, setSaveBenchmarkName] = useState('');
+  const [saveBenchmarkCategory, setSaveBenchmarkCategory] = useState<BenchmarkCategory>('Animation');
 
   // 1. Initial Load of projects from LocalStorage
   useEffect(() => {
@@ -82,6 +89,47 @@ export default function App() {
     setProjects(migrated);
     setActiveProjectId(migrated[0].id);
   }, []);
+
+  // 1b. Initial load of user-saved/deleted benchmarks from LocalStorage
+  useEffect(() => {
+    try {
+      const storedCustom = localStorage.getItem(CUSTOM_BENCHMARKS_KEY);
+      if (storedCustom) setCustomBenchmarks(JSON.parse(storedCustom));
+    } catch (err) {
+      console.error("Failed to restore custom benchmarks from LocalStorage", err);
+    }
+    try {
+      const storedDeleted = localStorage.getItem(DELETED_BENCHMARKS_KEY);
+      if (storedDeleted) setDeletedBenchmarkIds(JSON.parse(storedDeleted));
+    } catch (err) {
+      console.error("Failed to restore deleted benchmark ids from LocalStorage", err);
+    }
+  }, []);
+
+  // Combined benchmark library: seed tactics + user-saved, minus user-deleted
+  const allBenchmarkTactics = useMemo(() => {
+    return [...BENCHMARK_TACTICS, ...customBenchmarks].filter(t => !deletedBenchmarkIds.includes(t.id));
+  }, [customBenchmarks, deletedBenchmarkIds]);
+
+  // Save a new custom benchmark and persist it
+  const handleSaveNewBenchmark = (tactic: BenchmarkTactic) => {
+    const updated = [...customBenchmarks, tactic];
+    setCustomBenchmarks(updated);
+    localStorage.setItem(CUSTOM_BENCHMARKS_KEY, JSON.stringify(updated));
+  };
+
+  // Remove a benchmark (custom or seed) from the library
+  const handleDeleteBenchmark = (id: string) => {
+    if (customBenchmarks.some(t => t.id === id)) {
+      const updated = customBenchmarks.filter(t => t.id !== id);
+      setCustomBenchmarks(updated);
+      localStorage.setItem(CUSTOM_BENCHMARKS_KEY, JSON.stringify(updated));
+    } else {
+      const updated = [...deletedBenchmarkIds, id];
+      setDeletedBenchmarkIds(updated);
+      localStorage.setItem(DELETED_BENCHMARKS_KEY, JSON.stringify(updated));
+    }
+  };
 
   // 2. Persist to LocalStorage whenever projects change
   const saveProjects = (updatedProjects: Project[]) => {
@@ -222,6 +270,33 @@ export default function App() {
     const updated = [newProj, ...projects];
     saveProjects(updated);
     setActiveProjectId(newProj.id);
+  };
+
+  // Open the "Save as Benchmark" modal, pre-filled from the active project
+  const handleOpenSaveBenchmark = () => {
+    setSaveBenchmarkName(activeProject.details.projectName || 'Untitled Benchmark');
+    setSaveBenchmarkCategory('Animation');
+    setIsSaveBenchmarkModalOpen(true);
+  };
+
+  // Save the active project as a new benchmark tactic in the library
+  const confirmSaveBenchmark = () => {
+    const cleanName = saveBenchmarkName.trim() || 'Untitled Benchmark';
+    let tactic = createBenchmarkFromProject(activeProject, cleanName, saveBenchmarkCategory);
+
+    // Ensure a unique id in case of a name collision with an existing tactic
+    if (allBenchmarkTactics.some(t => t.id === tactic.id)) {
+      let suffix = 2;
+      let uniqueId = `${tactic.id}_${suffix}`;
+      while (allBenchmarkTactics.some(t => t.id === uniqueId)) {
+        suffix += 1;
+        uniqueId = `${tactic.id}_${suffix}`;
+      }
+      tactic = { ...tactic, id: uniqueId };
+    }
+
+    handleSaveNewBenchmark(tactic);
+    setIsSaveBenchmarkModalOpen(false);
   };
 
   // Duplicate project estimate (cloning with version number increments)
@@ -629,6 +704,7 @@ export default function App() {
           onResetToDefaults={handleResetToDefaults}
           onImportProject={handleImportProject}
           onOpenBenchmarkLibrary={() => setIsBenchmarkLibraryOpen(true)}
+          onOpenSaveBenchmark={handleOpenSaveBenchmark}
         />
 
         {/* Master Estimator Grid Layout (Main Area vs Summary Sidebar) */}
@@ -989,7 +1065,78 @@ export default function App() {
         isOpen={isBenchmarkLibraryOpen}
         onClose={() => setIsBenchmarkLibraryOpen(false)}
         onLoad={handleLoadBenchmark}
+        tactics={allBenchmarkTactics}
+        onDelete={handleDeleteBenchmark}
       />
+
+      {/* 8. Save Current Estimate as a Benchmark */}
+      {isSaveBenchmarkModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4" id="modal-save-benchmark">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              confirmSaveBenchmark();
+            }}
+            className="bg-white rounded-xl border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          >
+            <div className="bg-indigo-50 p-4 border-b border-indigo-150 flex items-center gap-3">
+              <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 shrink-0">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Save as Benchmark</h3>
+                <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Add to Benchmark Library</p>
+              </div>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="flex flex-col space-y-1">
+                <label htmlFor="saveBenchmarkName" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Benchmark Name</label>
+                <input
+                  id="saveBenchmarkName"
+                  type="text"
+                  required
+                  className="w-full py-2 px-3 border border-slate-200 rounded text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:outline-hidden transition-colors"
+                  placeholder="e.g. Animated Product Demo - Level 1"
+                  value={saveBenchmarkName}
+                  onChange={(e) => setSaveBenchmarkName(e.target.value)}
+                  autoFocus
+                />
+              </div>
+              <div className="flex flex-col space-y-1">
+                <label htmlFor="saveBenchmarkCategory" className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Category</label>
+                <select
+                  id="saveBenchmarkCategory"
+                  className="w-full py-2 px-3 border border-slate-200 rounded text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-indigo-500 focus:outline-hidden transition-colors cursor-pointer"
+                  value={saveBenchmarkCategory}
+                  onChange={(e) => setSaveBenchmarkCategory(e.target.value as BenchmarkCategory)}
+                >
+                  {BENCHMARK_CATEGORIES.map(c => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+              <p className="text-[10px] text-slate-400 leading-normal font-medium">
+                Saves the current estimate's labor roles and hours (excluding the Production Management phase) as a reusable benchmark tactic. Scope of Work becomes the benchmark description.
+              </p>
+            </div>
+            <div className="bg-slate-50 p-3 px-5 flex justify-end gap-2 border-t border-slate-150">
+              <button
+                type="button"
+                onClick={() => setIsSaveBenchmarkModalOpen(false)}
+                className="px-3 py-1.5 bg-white border border-slate-200 text-slate-500 hover:text-slate-800 text-[10px] font-black uppercase tracking-wider rounded transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-wider rounded transition-colors shadow-xs cursor-pointer"
+              >
+                Save Benchmark
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   );
 }
